@@ -8,7 +8,7 @@ Cursor / Claude / Codex skills I actually use — memory sync, shipping PRs, exp
 
 ## What this is
 
-A small set of agent skills under `skills/<name>/SKILL.md`. Point your agent at them (or symlink into your skills directory) and invoke by name or slash command.
+A small set of agent skills under `skills/<name>/SKILL.md`. Install with the [skills CLI](https://skills.sh/docs/cli), then invoke by name or slash command.
 
 Who it's for: people running Cursor (or Claude / Codex with skills support) who want reusable workflows instead of re-prompting the same ritual every time.
 
@@ -59,28 +59,47 @@ This skill does **not** lint this repo. Invoke it inside a TypeScript or JavaScr
 
 ## Install
 
-This git repo is the **only copy** of these skills. Other product repos should **not** vendor them under `.cursor/skills/`. Symlink once into your user skills dirs so Cursor / Claude / Codex all see the same files.
-
 ```bash
-git clone https://github.com/amanjotx/Agent-Skills.git
-cd Agent-Skills
-
-mkdir -p ~/.agents/skills ~/.cursor/skills ~/.claude/skills
-
-for s in hydrate ingest ship simply anti-slop; do
-  ln -sfn "$(pwd)/skills/$s" ~/.agents/skills/$s
-  ln -sfn ~/.agents/skills/$s ~/.cursor/skills/$s
-  ln -sfn ~/.agents/skills/$s ~/.claude/skills/$s
-done
+npx skills add amanjotx/Agent-Skills --all
 ```
 
-`ln -sfn` replaces an existing file or symlink. If `~/.agents/skills/<name>` is a **real directory** (a stale copy), remove it first: `rm -rf ~/.agents/skills/<name>`.
+`--all` installs every skill to every detected agent, no prompts. Use `-g` to install globally (user-level, all projects) instead of the current repo:
 
-**Cursor** also reads `~/.cursor/skills/<name>/SKILL.md` (personal, every project) and `<repo>/.cursor/skills/` (project-only, shared with whoever clones that repo). Keep these skills personal — they are your workflow, not Shepherd’s product.
+```bash
+npx skills add amanjotx/Agent-Skills --all -g
+```
 
-**Claude / Codex:** `~/.agents/skills` and `~/.claude/skills` are the usual user paths.
+### Selective
 
-Only symlink the skills you want. Skip `hydrate` / `ingest` if you aren't using Hydra DB.
+Pick a few skills. Skip `hydrate` / `ingest` if you aren't using Hydra DB.
+
+```bash
+npx skills add amanjotx/Agent-Skills --skill ship --skill simply --skill anti-slop
+```
+
+Preview the repo without installing:
+
+```bash
+npx skills add amanjotx/Agent-Skills --list
+```
+
+### Individual
+
+```bash
+npx skills add amanjotx/Agent-Skills@hydrate
+npx skills add amanjotx/Agent-Skills@ingest
+npx skills add amanjotx/Agent-Skills@ship
+npx skills add amanjotx/Agent-Skills@simply
+npx skills add amanjotx/Agent-Skills@anti-slop
+```
+
+Same thing with `--skill`:
+
+```bash
+npx skills add amanjotx/Agent-Skills --skill ship
+```
+
+Do **not** vendor these into other product repos under `.cursor/skills/` — install from this source and keep them personal.
 
 ---
 
