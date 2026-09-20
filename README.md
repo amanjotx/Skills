@@ -1,69 +1,14 @@
 # Agent Skills
 
-Cursor / Claude / Codex skills I actually use — memory sync, shipping PRs, explaining plans, and a vendored Oxlint installer.
+Skills I actually use in Cursor, Claude, and Codex — memory, shipping, UI polish, browser automation, and lint setup.
 
 **Author:** [Amanjot Singh](https://github.com/amanjotx)
-
----
-
-## What this is
-
-A small set of agent skills under `skills/<name>/SKILL.md`. Install with the [skills CLI](https://skills.sh/docs/cli), then invoke by name or slash command.
-
-Who it's for: people running Cursor (or Claude / Codex with skills support) who want reusable workflows instead of re-prompting the same ritual every time.
-
----
-
-## Skills
-
-| Skill         | What it does                                                                               | When to use                                                                |
-| ------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| **hydrate**   | Incremental rewrite of the one `{project}-standing` Hydra knowledge source from a git waypoint | After you've already ingested — keep standing current without a full remap |
-| **ingest**    | Full bootstrap: one distilled standing document (problem, destination vs code, wiring)     | First time (or reset) for a project — build the memory baseline            |
-| **ship**      | Branch from main, conventional commits, push, open a detailed GitHub PR via `gh`           | Ready to land work — want a clean branch + PR, not a dump of diffs         |
-| **simply**    | Re-explain plans and designs in plain language, with analogies and simple diagrams         | When a plan is correct but dense — `/simply` until it clicks               |
-| **anti-slop** | Vendor [Dillon Mulroy](https://github.com/dmmulroy)'s Oxlint plugin into a TypeScript repo | Adding anti-slop lint rules to a JS/TS project — not this skills repo      |
-
-### hydrate & ingest
-
-These two are a pair. **ingest** writes one `{project}-standing` **knowledge** source (`--no-infer`). **hydrate** rewrites that same id from a git waypoint. Do not spawn sibling ids (`*-codebase-map`, `*-decisions-*`, `*-scars`).
-
-Use the **`hydradb` CLI** (not MCP). Pass `--collection {project}` on every call — never set `HYDRADB_COLLECTION` in the shell profile. Personal prefs live in a `personal` collection, not in project standing.
-
-```mermaid
-flowchart LR
-  ingest["ingest\nfull bootstrap"] --> waypoint["git sync waypoint"]
-  waypoint --> hydrate["hydrate\nrewrite standing"]
-  hydrate --> waypoint
-```
-
-Both need the [HydraDB CLI](https://docs.hydradb.com/plugins/cli) (`hydradb`). Put `HYDRADB_API_KEY` and `HYDRADB_DATABASE` in `~/.zshenv` (Cursor agents skip `~/.zshrc`). This repo does not ship credentials.
-
-`hydrate` and `ingest` are typically `disable-model-invocation: true` — invoke them explicitly (slash / skill pick), not as silent auto-tools.
-
-### ship
-
-Uses the GitHub CLI (`gh`). Expects you authenticated and in a git repo. Handles the boring parts: branch off main, commit style, push, PR body with enough context to review.
-
-### simply
-
-Slash-command style: `/simply`. Feed it a plan, design, or architecture dump; get back plain language, analogies, and light diagrams.
-
-### anti-slop
-
-Vendored from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop) by [Dillon Mulroy](https://github.com/dmmulroy) (MIT). Original skill name was `install-anti-slop`; the folder here is `anti-slop`.
-
-This skill does **not** lint this repo. Invoke it inside a TypeScript or JavaScript product repo. It copies the bundled Oxlint plugin to `tools/oxlint/anti-slop/`, installs `oxlint` + `@oxlint/plugins`, and wires the config. Do not run the installer against Agent-Skills.
-
----
-
-## Install
 
 ```bash
 npx skills add amanjotx/Agent-Skills --all
 ```
 
-`--all` installs every skill to every detected agent, no prompts. Use `-g` to install globally (user-level, all projects) instead of the current repo:
+`--all` installs every skill to every detected agent, no prompts. Add `-g` for a user-level (global) install:
 
 ```bash
 npx skills add amanjotx/Agent-Skills --all -g
@@ -71,16 +16,10 @@ npx skills add amanjotx/Agent-Skills --all -g
 
 ### Selective
 
-Pick a few skills. Skip `hydrate` / `ingest` if you aren't using Hydra DB.
+Interactive picker for which skills and agents to install. Skip `hydrate` / `ingest` if you aren't using Hydra DB.
 
 ```bash
-npx skills add amanjotx/Agent-Skills --skill ship --skill simply --skill anti-slop
-```
-
-Preview the repo without installing:
-
-```bash
-npx skills add amanjotx/Agent-Skills --list
+npx skills add amanjotx/Agent-Skills
 ```
 
 ### Individual
@@ -91,32 +30,54 @@ npx skills add amanjotx/Agent-Skills@ingest
 npx skills add amanjotx/Agent-Skills@ship
 npx skills add amanjotx/Agent-Skills@simply
 npx skills add amanjotx/Agent-Skills@anti-slop
+npx skills add amanjotx/Agent-Skills@agent-browser
+npx skills add amanjotx/Agent-Skills@better-ui
+npx skills add amanjotx/Agent-Skills@better-typography
+npx skills add amanjotx/Agent-Skills@better-colors
+npx skills add amanjotx/Agent-Skills@make-interfaces-feel-better
 ```
 
-Same thing with `--skill`:
+Or `npx skills add amanjotx/Agent-Skills --skill ship`.
 
-```bash
-npx skills add amanjotx/Agent-Skills --skill ship
-```
-
-Do **not** vendor these into other product repos under `.cursor/skills/` — install from this source and keep them personal.
+Do **not** copy these into other product repos under `.cursor/skills/` — install from this source.
 
 ---
 
-## Layout
+## Skills
 
+| Skill | What it does | When to use |
+| --- | --- | --- |
+| **hydrate** | Incremental rewrite of the one `{project}-standing` Hydra knowledge source from a git waypoint | After ingest — keep standing current without a full remap |
+| **ingest** | Full bootstrap: one distilled standing document (problem, destination vs code, wiring) | First time (or reset) for a project |
+| **ship** | Branch from main, conventional commits, push, open a detailed GitHub PR via `gh` | Ready to land work |
+| **simply** | Re-explain plans in plain language, with analogies and simple diagrams | Plan is correct but dense — `/simply` |
+| **anti-slop** | Vendor [Dillon Mulroy](https://github.com/dmmulroy)'s Oxlint plugin into a TS/JS repo | Adding anti-slop lint — not in this skills repo |
+| **agent-browser** | Stub for the [agent-browser](https://github.com/vercel-labs/agent-browser) CLI | Browser / Electron / Slack automation — install the CLI first |
+| **better-ui** | Radii, shadows, motion, hit areas | UI polish (type → **better-typography**) |
+| **better-typography** | Fonts, scale, wrapping, OpenType, text a11y | Anything with text |
+| **better-colors** | OKLCH conversion, palettes, contrast, gamut, Tailwind v4 | Color tokens, dark mode, contrast |
+| **make-interfaces-feel-better** | Broader polish (surfaces, type, motion, performance) | One “feels off” pass; overlaps **better-ui** |
+
+### hydrate & ingest
+
+A pair. **ingest** writes one `{project}-standing` **knowledge** source (`--no-infer`). **hydrate** rewrites that same id from a git waypoint. Do not spawn sibling ids (`*-codebase-map`, `*-decisions-*`, `*-scars`).
+
+Use the **`hydradb` CLI** (not MCP). Pass `--collection {project}` on every call — never set `HYDRADB_COLLECTION` in the shell profile. Personal prefs live in a `personal` collection. Put `HYDRADB_API_KEY` and `HYDRADB_DATABASE` in `~/.zshenv`. Typically `disable-model-invocation: true` — invoke them explicitly.
+
+```mermaid
+flowchart LR
+  ingest["ingest\nfull bootstrap"] --> waypoint["git sync waypoint"]
+  waypoint --> hydrate["hydrate\nrewrite standing"]
+  hydrate --> waypoint
 ```
-skills/
-  hydrate/SKILL.md
-  ingest/SKILL.md
-  ship/SKILL.md
-  simply/SKILL.md
-  anti-slop/          # vendored from dmmulroy/anti-slop (Dillon Mulroy)
-    SKILL.md
-    LICENSE
-    scripts/install.mjs
-    assets/anti-slop/ # Oxlint plugin copied into TS repos
-```
+
+### Notes
+
+- **ship** needs `gh` in a git repo.
+- **anti-slop** copies into `tools/oxlint/anti-slop/` in a product repo. Do not run the installer against Agent-Skills. Vendored from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop) (MIT).
+- **agent-browser** loads live docs via `agent-browser skills get core`. Install: `npm i -g agent-browser && agent-browser install`. Vendored stub from [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) (Apache-2.0).
+- **better-ui**, **better-typography**, **better-colors** from [jakubkrehel/skills](https://github.com/jakubkrehel/skills) (MIT).
+- **make-interfaces-feel-better** from [jakubkrehel/make-interfaces-feel-better](https://github.com/jakubkrehel/make-interfaces-feel-better) (MIT).
 
 ---
 
@@ -124,4 +85,9 @@ skills/
 
 [MIT](./LICENSE) © 2026 Amanjot Singh
 
-`skills/anti-slop` is [MIT](./skills/anti-slop/LICENSE) © 2026 [Dillon Mulroy](https://github.com/dmmulroy) — [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop).
+Vendored skills keep their upstream licenses:
+
+- `skills/anti-slop` — [MIT](./skills/anti-slop/LICENSE) © 2026 [Dillon Mulroy](https://github.com/dmmulroy)
+- `skills/better-ui`, `better-typography`, `better-colors` — [MIT](./skills/better-ui/LICENSE) © 2026 [Jakub Krehel](https://github.com/jakubkrehel)
+- `skills/make-interfaces-feel-better` — [MIT](./skills/make-interfaces-feel-better/LICENSE) © 2026 [Jakub Krehel](https://github.com/jakubkrehel)
+- `skills/agent-browser` — [Apache-2.0](./skills/agent-browser/LICENSE) — [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)
