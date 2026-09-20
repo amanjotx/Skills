@@ -1,17 +1,17 @@
-# Agent Skills
+# Skills
 
 Skills I actually use in Cursor, Claude, and Codex — memory, shipping, UI polish, browser automation, and lint setup.
 
 **Author:** [Amanjot Singh](https://github.com/amanjotx)
 
 ```bash
-npx skills add amanjotx/Agent-Skills --all
+npx skills add amanjotx/Skills --all
 ```
 
 `--all` installs every skill to every detected agent, no prompts. Add `-g` for a user-level (global) install:
 
 ```bash
-npx skills add amanjotx/Agent-Skills --all -g
+npx skills add amanjotx/Skills --all -g
 ```
 
 ### Selective
@@ -19,25 +19,25 @@ npx skills add amanjotx/Agent-Skills --all -g
 Interactive picker for which skills and agents to install. Skip `hydrate` / `ingest` if you aren't using Hydra DB.
 
 ```bash
-npx skills add amanjotx/Agent-Skills
+npx skills add amanjotx/Skills
 ```
 
 ### Individual
 
 ```bash
-npx skills add amanjotx/Agent-Skills@hydrate
-npx skills add amanjotx/Agent-Skills@ingest
-npx skills add amanjotx/Agent-Skills@ship
-npx skills add amanjotx/Agent-Skills@simply
-npx skills add amanjotx/Agent-Skills@anti-slop
-npx skills add amanjotx/Agent-Skills@agent-browser
-npx skills add amanjotx/Agent-Skills@better-ui
-npx skills add amanjotx/Agent-Skills@better-typography
-npx skills add amanjotx/Agent-Skills@better-colors
-npx skills add amanjotx/Agent-Skills@make-interfaces-feel-better
+npx skills add amanjotx/Skills@hydrate
+npx skills add amanjotx/Skills@ingest
+npx skills add amanjotx/Skills@ship
+npx skills add amanjotx/Skills@simply
+npx skills add amanjotx/Skills@anti-slop
+npx skills add amanjotx/Skills@agent-browser
+npx skills add amanjotx/Skills@better-ui
+npx skills add amanjotx/Skills@better-typography
+npx skills add amanjotx/Skills@better-colors
+npx skills add amanjotx/Skills@make-interfaces-feel-better
 ```
 
-Or `npx skills add amanjotx/Agent-Skills --skill ship`.
+Or `npx skills add amanjotx/Skills --skill ship`.
 
 Do **not** copy these into other product repos under `.cursor/skills/` — install from this source.
 
@@ -74,7 +74,7 @@ flowchart LR
 ### Notes
 
 - **ship** needs `gh` in a git repo.
-- **anti-slop** copies into `tools/oxlint/anti-slop/` in a product repo. Do not run the installer against Agent-Skills. Vendored from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop) (MIT).
+- **anti-slop** copies into `tools/oxlint/anti-slop/` in a product repo. Do not run the installer against this Skills repo. Vendored from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop) (MIT).
 - **agent-browser** loads live docs via `agent-browser skills get core`. Install: `npm i -g agent-browser && agent-browser install`. Vendored stub from [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) (Apache-2.0).
 - **better-ui**, **better-typography**, **better-colors** from [jakubkrehel/skills](https://github.com/jakubkrehel/skills) (MIT).
 - **make-interfaces-feel-better** from [jakubkrehel/make-interfaces-feel-better](https://github.com/jakubkrehel/make-interfaces-feel-better) (MIT).

@@ -7,7 +7,7 @@ description: Install and configure the anti-slop Oxlint plugin in a local TypeSc
 
 Vendored from [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop) by [Dillon Mulroy](https://github.com/dmmulroy). MIT — see [LICENSE](LICENSE).
 
-Install the bundled Oxlint plugin into the current repository and integrate it with the repository's existing lint setup. Preserve unrelated work and adapt to the project's package manager and configuration style. Do not run this installer in the Agent-Skills repo itself.
+Install the bundled Oxlint plugin into the current repository and integrate it with the repository's existing lint setup. Preserve unrelated work and adapt to the project's package manager and configuration style. Do not run this installer in the Skills repo itself.
 
 ## Procedure
 
